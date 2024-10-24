@@ -1,0 +1,27 @@
+OPIS ALGORYTICZNY MAŁEGO SKRYPTU NR 1
+
+ZADANIE SKRYPTU:
+Skrypt ma za zadanie zapisywać na podstawie podanych danych w plikach logów z serwerów ftp i http podać całkowitą liczbę unikatowych pobrań dla każdej z wersji dystrybucji Linux.
+
+OPIS DZIAŁANIA:
+
+>>> Komendy przedstawione w linii czwartej odpowiadają za przeszukiwanie pliku "cdlinux.ftp.log" i zapisywanie wyników do pliku tymczasowego "temporary.txt":
+1.1) Komenda (grep "OK DOWNLOAD" cdlinux.ftp.log) odpowiada za przeszukiwanie pliku "cdlinux.ftp.log" w poszukiwaniu linii zawierających frazę "OK DOWNLOAD" i wypisuje te linie do standardowego wyjścia.
+1.2) Kolejna komenda (cut -d '"' -f 2,4) wycina pola o numerach 2 i 4 z każdej linii, gdzie separatorem jest podwójny cudzysłów. Wynikiem komendy będzie wycięcie ścieżki do pliku .iso oraz adresu IP klienta.
+1.3) Następnym krokiem (sort -u) jest posortowanie wyników wycięcia z pól i wybranie tylko unikalnych wartości. Oznacza to, że wszystkie duplikaty zostaną usunięte i pozostanie tylko jedna unikalna wartość.
+1.4) Kolejne polecenie (sed "s#.*/##") odpowiada za usunięcie ścieżki z każdego linku, pozostawiając tylko nazwę pliku .iso. Oznacza to, że każdy ciąg znaków zaczynający się od pierwszego wystąpienia znaku '/' (włącznie z nim) do końca linii zostanie zastąpiony pustym ciągiem.
+1.5) Ostatnie polecenie dla danej linii (grep "\.iso" > temporary.txt) wypisze tylko te linie, które zawierają '.iso' do pliku tymczasowego temporary.txt. Komenda grep jest konieczna, ponieważ w wyniku działania poprzedniego polecenia w pliku zostały wypisane także wyjątki, których chcemy się pozbyć.
+
+>>> Komenda przedstawiona w linii piątej odpowiada za przeszukiwanie pliku "cdlinux.www.log" i przekierowywanie wyników do pliku tymczasowego "temporary.txt":
+2.1) Komenda (grep "/cdlinux-" cdlinux.www.log) tak jak w poprzednim przykładzie odpowiada za przeszukiwanie pliku "cdlinux.www.log" w poszukiwaniu linii zawierających frazę "/cdlinux-" i wypisuje te linie do standardowego wyjścia.
+2.2) Następnie polecenie (cut -d ' ' -f 1,7,9) zostanie użyte, aby wyciąć 1, 7 i 9 pole z każdej linii, gdzie separatorem jest spacja.
+2.3) Komenda (cut -d ':' -f 2) wycina tylko drugie pole z każdego wyniku z poprzedniego polecenia, które odpowiada adresowi IP klienta, a separator to dwukropek.
+2.4) Następnie polecenie (grep "200") przefiltruje tylko te linie, które zawierają "200", co oznacza, że żądanie HTTP zostało zakończone sukcesem. Plik został pobrany w całości.
+2.5) Komenda (sort -u) działa na tej samej zasadzie jak w podpunkcie 1.3.
+2.6) Dalej polecenie (cut -d ' ' -f 2) wycina drugie pole z każdej linii, co odpowiada adresowi URL.
+2.7) Następne wyrażenie (sed "s#.*/##") działa identycznie jak punkt 1.4.
+2.8) Wynik z poprzedniego polecenia jest przekierowywany (grep "\.iso$" >> temporary.txt) w celu wypisania tylko linii kończących się na '.iso'. Znak '$' oznacza, że linie zawierające dodatkowe znaki po postfixie '.iso' zostaną pominięte. Następnie wynik zostanie dopisany do pliku temporary.txt.
+
+>>> Komenda w linii szóstej odpowiadają kolejno za sortowanie zawartości pliku temporary.txt w kolejności alfabetycznej. Następnie (uniq -c) zlicza liczbę wystąpień każdej zawartości dystrybucji i dodaje tę informację na początku linii w postaci liczby całkowitej na początku linii. Dalej (sort -rn > Small_Script_1.txt) wynik jest sortowany w kolejności malejącej liczby wystąpień i zapisywany do pliku Small_Script_1.txt.
+
+>>> Komenda w linii siódmej (rm temporary.txt) kasuje plik tymczasowy temporary.txt, który był potrzebny do przechowywania liczby wystąpień danej dystrybucji w poprzednich krokach.

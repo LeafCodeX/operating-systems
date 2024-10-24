@@ -1,0 +1,26 @@
+PROJEKT DUŻEGO SKRYPTU
+Autor (index): Marcin Bajkowski (193696)
+Kierunek: Informatyka WETI, 2023
+
+Temat projektu:
+	Skrypt do edycji i konwersji plików zdjęciowych z wykorzystaniem programu ImageMagick oraz oprogramowania Zenity.
+
+Funkcjonalności:
+	- Zmiana rozmiarów obrazu (poprzez podanie wysokości i szerokości lub wartości w %)
+	- Modyfikacja wyglądu zdjęcia (w tym kontrastu np. na negatyw lub inny kolor wybrany przez użytkownika),
+	- Wyciąganie krzywych kolorów,
+	- Zmiana orientacji zdjęcia (obrót zdjęcia np. do pozycji poziomej/pionowej oraz o dowolny kąt),
+	- Konwersja zdjęcia do innych formatów (np. jpg, png, pdf),
+	- Instalacja (jeśli niedostępny) i deinstalacja ImageMagick,
+	- Opis działania programu i jego możliwości w Zenity,
+	- Menu z wyborem funkcji w Zenity (w tym wyjście z programu).
+
+Plan realizacji:
+	1. Sprawdzenie, czy program ImageMagick jest zainstalowany. Jeśli nie - zainstaluje go.
+	2. Wyświetlenie menu z opcjami skryptu w wykorzystaniem Zenity.
+	3. Wykonywanie operacji wybranej przez użytkownika i wyświetlanie stosownej informacji o wykonaniu operacji zadanej przez użytkownika.
+
+Dodatkowe założenia:
+	Plik będzie obsługiwał wyłącznie pliki zdjęciowe.
+
+
